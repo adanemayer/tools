@@ -5,6 +5,9 @@
 # 2. All OpenVPN files need to be changed to user file for username/password
 # 3. All OpenVPN files need to be placed in Home/vpn/sites directory
 
+# Log current IP
+CUR_IP=( `curl ifconfig.me` )
+echo "VPN_ROTATE - `date +"%Y-%m-%d_%T"` - INFO: Current IP address is $CUR_IP" > /var/log/vpn_rotate.log
 
 # Obtain list of OpenVPN config files in user directory
 VPN_GW_LIST=( `find $HOME/vpn/sites/ -name '*.ovpn'` )
@@ -27,10 +30,11 @@ systemctl status openvpn
 # Restart OpenVPN service
 # systemctl restart openvpn
 
-sleep 60
+sleep 30
 
 # Check OpenVPN service status
 systemctl status openvpn
 
 # Check new Public IP
-curl ifconfig.me
+NEW_IP=( `curl ifconfig.me` )
+echo "VPN_ROTATE - `date +"%Y-%m-%d_%T"` - INFO: New IP address is $NEW_IP" > /var/log/vpn_rotate.log
