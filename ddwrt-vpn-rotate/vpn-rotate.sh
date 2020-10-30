@@ -9,17 +9,18 @@ function randomNumber {
     dd if=/dev/urandom bs=$digits count=2 2> /dev/null | while read -r -n1 char; do
             number=$number$(printf "%d" "'$char")
             if [ ${#number} -ge $digits ]; then
-                    echo ${number:0:$digits}
+                    return ${number:0:$digits}
                     break;
             fi
     done
 }
 
 function gwSelect {
-	local num=$(randomNumber 1)
+	randomNumber 1
+	local num=$? #(randomNumber 1)
 
 	local count=0
-	set -- "be-06.protonvpn.com" "ie-06.protonvpn.com" "it-01.protonvpn.com"
+	set -- "be-06.protonvpn.com" "ie-06.protonvpn.com" "it-01.protonvpn.com" "3" "4" "5" "6" "7" "8" "9"
 	for i; do
         	if [[ "$count" == "$num" ]]; then
                 	echo "$i"
@@ -30,6 +31,8 @@ function gwSelect {
 }
 
 gw=$(gwSelect)
+
+echo $gw
 
 nvram set openvpncl_remoteip=$gw
 nvram commit
