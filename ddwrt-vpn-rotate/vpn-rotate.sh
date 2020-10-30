@@ -15,10 +15,23 @@ function randomNumber {
     done
 }
 
-randomNumber 1
+function gwSelect {
+	local num=$(randomNumber 1)
 
+	local count=0
+	set -- "be-06.protonvpn.com" "ie-06.protonvpn.com" "it-01.protonvpn.com"
+	for i; do
+        	if [[ "$count" == "$num" ]]; then
+                	echo "$i"
+			break;
+        	fi
+        	count=$((count+1))
+	done
+}
 
-nvram set openvpncl_remoteip=be-06.protonvpn.com
+gw=$(gwSelect)
+
+nvram set openvpncl_remoteip=$gw
 nvram commit
 restart openvpn
 
